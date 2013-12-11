@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\background.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Cylinder.cpp" />
+    <ClCompile Include="src\Error.cpp" />
+    <ClCompile Include="src\Framebuffer.cpp" />
+    <ClCompile Include="src\Globals.cpp" />
+    <ClCompile Include="src\glslprogram.cpp" />
+    <ClCompile Include="src\ilcontainer.cpp" />
+    <ClCompile Include="src\Light.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Mars.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\object.cpp" />
+    <ClCompile Include="src\RenderTexture.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\SimpleFMOD.cpp" />
+    <ClCompile Include="src\SoundManager.cpp" />
+    <ClCompile Include="src\Sphere.cpp" />
+    <ClCompile Include="src\Spline.cpp" />
+    <ClCompile Include="src\Starfield.cpp" />
+    <ClCompile Include="src\vertexattributes.cpp" />
+    <ClCompile Include="src\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\background.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Cylinder.h" />
+    <ClInclude Include="src\Error.h" />
+    <ClInclude Include="src\Framebuffer.h" />
+    <ClInclude Include="src\Globals.h" />
+    <ClInclude Include="src\glslprogram.h" />
+    <ClInclude Include="src\ilcontainer.h" />
+    <ClInclude Include="src\Light.h" />
+    <ClInclude Include="src\Mars.h" />
+    <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\object.h" />
+    <ClInclude Include="src\RenderTexture.h" />
+    <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\SimpleFMOD.h" />
+    <ClInclude Include="src\SoundManager.h" />
+    <ClInclude Include="src\Sphere.h" />
+    <ClInclude Include="src\Spline.h" />
+    <ClInclude Include="src\Starfield.h" />
+    <ClInclude Include="src\vertexattributes.h" />
+    <ClInclude Include="src\Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\ads_shader.vert" />
+    <None Include="shaders\background_gradient.frag" />
+    <None Include="shaders\background_gradient.vert" />
+    <None Include="shaders\multi_ads_shader.frag" />
+    <None Include="shaders\music_shader.frag" />
+    <None Include="shaders\music_shader.vert" />
+    <None Include="shaders\pattern_shader.frag" />
+    <None Include="shaders\pattern_shader.vert" />
+    <None Include="shaders\post_process.frag" />
+    <None Include="shaders\post_process.vert" />
+    <None Include="shaders\solid_shader.frag" />
+    <None Include="shaders\solid_shader.vert" />
+    <None Include="shaders\spotlight_wireframe_shader.frag" />
+    <None Include="shaders\spotlight_wireframe_shader.geo" />
+    <None Include="shaders\spotlight_wireframe_shader.vert" />
+    <None Include="shaders\stripe_model_space.frag" />
+    <None Include="shaders\stripe_model_space.vert" />
+    <None Include="shaders\texture_shader.frag" />
+    <None Include="shaders\texture_shader.vert" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4058B364-00C8-48CB-8DD1-BF097532BB40}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Visualizer</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files %28x86%29\freeglut\include;C:\Program Files %28x86%29\glew\include;C:\Program Files %28x86%29\DevIL-1.7.8\include;C:\Users\Jackson\Documents\Visual Studio 2012\Projects\Visualizer\Visualizer\libraries\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;C:\Program Files %28x86%29\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\DevIL-1.7.8\lib;C:\Users\Jackson\Documents\Visual Studio 2012\Projects\Visualizer\Visualizer\libraries\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\Program Files %28x86%29\glew\lib;C:\Program Files %28x86%29\freeglut\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Program Files %28x86%29\freeglut\include;C:\Program Files %28x86%29\glew\include;C:\Program Files %28x86%29\DevIL-1.7.8\include;C:\Users\Jackson\Documents\Visual Studio 2012\Projects\Visualizer\Visualizer\libraries\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;C:\Program Files %28x86%29\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\DevIL-1.7.8\lib;C:\Users\Jackson\Documents\Visual Studio 2012\Projects\Visualizer\Visualizer\libraries\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\Program Files %28x86%29\glew\lib;C:\Program Files %28x86%29\freeglut\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>fmodex_vc.lib;freeglut.lib;glew32.lib;devIL.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>fmodex_vc.lib;freeglut.lib;glew32.lib;devIL.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
