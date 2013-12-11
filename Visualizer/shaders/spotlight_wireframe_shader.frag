@@ -112,10 +112,12 @@ void main() {
 
 	//calculate the color value with ADS, 
     vec4 t_color = texture2D(s_texture, Gtexture);
-
-	vec4 lit_color = vec4(ads(), 1.0) * t_color * vec4(Gcolor, 1.0);
-	vec4 lit_color2 = vec4(adsWithSpotlight() * Gcolor, 1.0);
+	vec4 line_color = t_color;
+	t_color.w = 0.25;
+	//vec4 lit_color = vec4(ads(), 1.0) * t_color * vec4(Gcolor, 1.0);
+	//vec4 lit_color2 = vec4(adsWithSpotlight() * Gcolor, 1.0);
 
 	//FragColor = lit_color + lit_color2;
-	FragColor = mix(lit_color + lit_color2, Line.Color, mixVal); 
+	vec4 lineC = line_color;
+	FragColor = mix(t_color, lineC, mixVal); 
 }
