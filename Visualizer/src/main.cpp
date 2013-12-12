@@ -332,12 +332,14 @@ void PostProcess(float current_time) {
 		
 		//splineMV = rotate(splineMV, window.splineRotation, vec3(0, 1, 0));
 		//splineMV = rotate(splineMV, window.splineRotation, vec3(0, 0, 1));
-		splineMV = translate(splineMV, vec3(window.splineRotation / 10.0, 0.0f, 0.0f));
+		splineMV  = rotate(splineMV, window.camera.up_down, vec3(1, 0, 0));
+		splineMV  = rotate(splineMV, window.camera.x_offset, vec3(0, 1, 0));
+		//splineMV = translate(splineMV, vec3(window.splineRotation / 10.0, 0.0f, 0.0f));
 		spline.Draw(projection, splineMV, win_size, window.lights, 10);
 
 		temp = translate(temp, vec3(0.0f, 0.0f, 15.0f));
 		temp = scale(temp, vec3(.25f, .25f, .25f));
-		window.mars.Draw("music_shader", projection, temp, win_size, window.lights, 10); 
+		//window.mars.Draw("ads_shader", projection, temp, win_size, window.lights, 10); 
 		glFlush();
 }
 

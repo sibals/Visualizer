@@ -32,7 +32,7 @@ bool Spline::Initialize(int length, glm::vec3 startPos, glm::vec3 endPos)
 
 			vec3 pos = m_bezierPoints[x];
 
-			//pos.y += y;
+			//pos.y += y*10;
 			vertices[index].position = pos;
 			vertices[index].color = startColor;
 			startColor.r -= (1 / size.x);
@@ -40,13 +40,10 @@ bool Spline::Initialize(int length, glm::vec3 startPos, glm::vec3 endPos)
         }
     }
 
-	for(int i = 0; i < m_numBezierPoints; i++) {
-
-		m_randomOffsets.push_back(normalize(vec3(rand(), rand(), rand())));
-	}
-
     this->CalculateNormals(size.x, size.y);
     super::Initialize(10.0f);
+
+	randomOffsetVector = glm::normalize(vec3(rand() - (RAND_MAX / 2.0f), rand() - (RAND_MAX / 2.0f), rand() - (RAND_MAX / 2.0f))) * 5.0f;
 
 	return true;
 }
@@ -154,7 +151,7 @@ void Spline::CreatePoints(int length, glm::vec3 startPos, glm::vec3 endPos)
 			if(pointTwo > length - 1) break;
 
 			vec3 newPoint = (initialPoints[pointOne] + initialPoints[pointTwo]) / 2.0f;
-			vec3 randVec = vec3(float(rand()) / float(RAND_MAX) * 10 - 5, float(rand()) / float(RAND_MAX) * 10 - 5, float(rand()) / float(RAND_MAX) * 10 - 5);
+			vec3 randVec = vec3(0.0f, float(rand()) / float(RAND_MAX) * 10 - 5, float(rand()) / float(RAND_MAX) * 10 - 5);
 			//vec3 randVec = vec3(0.0f, 0.0f, 0.0f);
 			//printf("(%f, %f, %f)\n", randVec.x, randVec.y, randVec.z);
 
@@ -216,8 +213,9 @@ void Spline::Update(float deltaTime)
 		for(int y = 0; y < size.y; y++) {
 			for(int x = 0; x < size.x; x++) {
 				vec3 pos = m_bezierPoints[x];
-				//pos.y += m_randomOffsets[x].y;
-				pos.y += y;
+
+				pos += randomOffsetVector * float(y);
+				//pos.x += y;
 				vertices[index].position = pos;
 				index++;
 			}
@@ -229,6 +227,8 @@ void Spline::Update(float deltaTime)
         glBindVertexArray(this->vertex_array_handle);
         glBindBuffer(GL_ARRAY_BUFFER, this->vertex_coordinate_handle);
         glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(VertexAttributesPCNT), &this->vertices[0], GL_STATIC_DRAW);
+
+		CalculateNormals(size.x, size.y);
 }
 
 void Spline::Draw(const mat4 & projection, mat4 view, const ivec2 & size, Lights & lights, const float time)

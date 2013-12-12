@@ -8,7 +8,7 @@ RenderTexture::~RenderTexture() {
 
 void RenderTexture::StepPostEffect() {
 	this->curr_shader_index = ++this->curr_shader_index % this->shaders.size();
-	while(this->curr_shader_index < 5) {
+	while(this->curr_shader_index < 6) {
 		this->curr_shader_index = ++this->curr_shader_index % this->shaders.size();
 	}
 }
@@ -16,7 +16,7 @@ void RenderTexture::StepPostEffect() {
 bool RenderTexture::Initialize() {
 	this->BuildMesh(100, 100);
 	super::Initialize(10.0f);
-	curr_shader_index = 4;
+	curr_shader_index = 5;
 	return true;
 }
 
@@ -34,7 +34,7 @@ void RenderTexture::Draw(int textureID, int texture_id, const mat4 & projection,
 	this->GLReturnedError("Mesh::Draw - after use");
 	this->shaders[curr_shader_index]->CommonSetup(time, value_ptr(size), value_ptr(projection), value_ptr(view), value_ptr(mvp), value_ptr(nm));
 
-	if(curr_shader_index == 4)
+	if(curr_shader_index == 5)
 		this->post_normal.CustomSetup(textureID, texture_id);
 
 	this->GLReturnedError("Mesh::Draw - after common setup");

@@ -32,6 +32,7 @@ public:
 	
 	int shader_index;
 	Shader shader;
+	Shader ads_shader;
 	Shader solid_color;
 	Shader pattern_shader;
 	RenderTextureShader render_texture;

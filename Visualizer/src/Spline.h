@@ -31,7 +31,7 @@ private:
 	void CreatePoints(int length, glm::vec3 startPos, glm::vec3 endPos);
 	void CreateBezier(int detail);
 	int m_splineModificationIndex;
-	std::vector<vec3> m_randomOffsets;
+	vec3 randomOffsetVector;
 protected:
 	typedef Mesh super;
 };

@@ -169,12 +169,6 @@
     <None Include="shaders\music_shader.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shaders\pattern_shader.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="shaders\pattern_shader.vert">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="shaders\post_process.frag">
       <Filter>Shaders</Filter>
     </None>
@@ -206,6 +200,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\texture_shader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\pattern_shader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\pattern_shader.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

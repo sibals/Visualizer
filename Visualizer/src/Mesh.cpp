@@ -291,6 +291,9 @@ bool Mesh::Initialize(float size)
 		glBindVertexArray(0);
 	}
 
+	if(!this->ads_shader.Initialize("shaders/ads_shader.vert", "shaders/multi_ads_shader.frag"))
+		return false;
+
 	if (!this->shader.Initialize("shaders/music_shader.vert", "shaders/music_shader.frag"))
 		return false;
 
@@ -311,11 +314,12 @@ bool Mesh::Initialize(float size)
 
 
 	this->shaders.push_back(&this->shader);
+	this->shaders.push_back(&this->ads_shader);
 	this->shaders.push_back(&this->solid_color);
 	this->shaders.push_back(&this->texture_shader);
 	this->shaders.push_back(&this->spotlight_wireframe_shader);
 	
-	//post processing starts here - index 4
+	//post processing starts here - index 5
 	this->shaders.push_back(&this->post_normal);
 	this->shaders.push_back(&this->pattern_shader);
 
@@ -332,6 +336,7 @@ void Mesh::TakeDown()
 {
 	this->vertices.clear();
 	this->shader.TakeDown();
+	this->ads_shader.TakeDown();
 	this->solid_color.TakeDown();
 	this->texture_shader.TakeDown();
 	this->spotlight_shader.TakeDown();
@@ -367,13 +372,14 @@ void Mesh::Draw(string shaderName, const mat4 & projection, mat4 view, const ive
 	
 	if (shaderName == "music_shader") {
 		this->shader_index = 0;
+	} else if(shaderName == "ads_shader") {
+		this->shader_index = 1;
 	} else if (shaderName == "post_process") {
-		this->shader_index = 4;
-		printf("Using shader index 4\n");
-	} else if (shaderName == "solid_shader") {
-		this->shader_index = 1;	
-	} else if (shaderName == "pattern_shader") {
 		this->shader_index = 5;
+	} else if (shaderName == "solid_shader") {
+		this->shader_index = 2;	
+	} else if (shaderName == "pattern_shader") {
+		this->shader_index = 6;
 	} else {
 		this->shader_index = 0;
 	}
