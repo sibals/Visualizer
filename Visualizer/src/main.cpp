@@ -323,6 +323,8 @@ void PostProcess(float current_time) {
         
 		window.rendertexture.Draw(1, 2, projection, view, window.size, window.lights, (window.paused ? window.time_last_pause_began : current_time) - window.total_time_paused);        
         
+		projection = perspective(25.0f, window.window_aspect, 1.0f, 3000.0f);
+
 		glPolygonMode(GL_FRONT_AND_BACK, window.wireframe ? GL_LINE : GL_FILL);
 		mv = scale(mv, vec3(0.11f, 0.11f, 0.11f));
 		mv = translate(mv, vec3(0.0, 0.0f, 150.0f));

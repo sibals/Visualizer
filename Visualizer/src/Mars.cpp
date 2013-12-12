@@ -12,6 +12,7 @@ bool Mars::Initialize(float size, char * mars_filename, char * mars_texture_file
 	super::Initialize(size);
 
 	LoadTexture(mars_texture_filename);
+	//LoadTexture("assets/perry.jpg");
 
 	return true;
 }

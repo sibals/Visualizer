@@ -2,6 +2,9 @@
 
 Window::Window()
 {
+	printf("hello");
+	this->size = ivec2(1024, 768);
+	this->window_aspect = float(this->size.x) / float(this->size.y);
 	this->time_last_pause_began = this->total_time_paused = 0;
 	this->normals = this->wireframe = this->paused = false;
 	this->wireframe = false;
