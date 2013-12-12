@@ -296,6 +296,37 @@ void RenderPassTwo(float current_time) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
+void Draw3DSpace(float current_time, mat4 mv) {
+	ivec2 win_size = ivec2(1024, 768);	
+	
+	mat4 projection = perspective(25.0f, window.window_aspect, 1.0f, 3000.0f);
+	vec3 facing = vec3(0.0f, 0.0f, 0.0f);
+    vec3 up = vec3(0.0f, 1.0f, 0.0f);
+    vec3 position = vec3(0.0f, 0.0f, -4.0f);
+    mat4 temp = mv;
+
+	glPolygonMode(GL_FRONT_AND_BACK, window.wireframe ? GL_LINE : GL_FILL);
+	mv = scale(mv, vec3(0.11f, 0.11f, 0.11f));
+	mv = translate(mv, vec3(0.0, 0.0f, 150.0f));
+	mat4 splineMV = mv;
+		
+	//splineMV = rotate(splineMV, window.splineRotation, vec3(0, 1, 0));
+	//splineMV = rotate(splineMV, window.splineRotation, vec3(0, 0, 1));
+	splineMV  = rotate(splineMV, window.camera.up_down, vec3(1, 0, 0));
+	splineMV  = rotate(splineMV, window.camera.x_offset, vec3(0, 1, 0));
+	//splineMV = translate(splineMV, vec3(window.splineRotation / 10.0, 0.0f, 0.0f));
+	spline.Draw(projection, splineMV, window.size, window.lights, 10);
+
+	temp = translate(temp, vec3(0.0f, 0.0f, 15.0f));
+	temp = scale(temp, vec3(.25f, .25f, .25f));
+	temp = scale(temp, vec3(10.0f, 10.0f, 10.0f));
+	temp = rotate(temp, window.lastFrameTime * 10, vec3(0.0f, 1.0f, 0.0f));
+	glEnable(GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	window.mars.Draw("ads_shader", projection, temp, win_size, window.lights, 10); 
+	glDisable(GL_BLEND);
+}
+
 void PostProcess(float current_time) {
         UpdateScene(current_time);
 		spline.Update(window.deltaTime);
@@ -323,7 +354,7 @@ void PostProcess(float current_time) {
         
 		window.rendertexture.Draw(1, 2, projection, view, window.size, window.lights, (window.paused ? window.time_last_pause_began : current_time) - window.total_time_paused);        
         
-		projection = perspective(25.0f, window.window_aspect, 1.0f, 3000.0f);
+		/*projection = perspective(25.0f, window.window_aspect, 1.0f, 3000.0f);
 
 		glPolygonMode(GL_FRONT_AND_BACK, window.wireframe ? GL_LINE : GL_FILL);
 		mv = scale(mv, vec3(0.11f, 0.11f, 0.11f));
@@ -339,7 +370,15 @@ void PostProcess(float current_time) {
 
 		temp = translate(temp, vec3(0.0f, 0.0f, 15.0f));
 		temp = scale(temp, vec3(.25f, .25f, .25f));
-		//window.mars.Draw("ads_shader", projection, temp, win_size, window.lights, 10); 
+		temp = scale(temp, vec3(10.0f, 10.0f, 10.0f));
+		temp = rotate(temp, window.lastFrameTime * 10, vec3(0.0f, 1.0f, 0.0f));
+		glEnable(GL_BLEND);
+		glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+		window.mars.Draw("ads_shader", projection, temp, win_size, window.lights, 10); 
+		glDisable(GL_BLEND);*/
+
+		Draw3DSpace(current_time, mv);
+
 		glFlush();
 }
 

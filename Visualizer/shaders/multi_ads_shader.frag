@@ -40,5 +40,5 @@ vec3 ads( )
 
 void main()
 {
-	FragColor = vec4(ads(), 1.0);
+	FragColor = vec4(ads(), 0.5);
 }
