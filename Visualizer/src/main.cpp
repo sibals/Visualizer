@@ -299,35 +299,34 @@ void RenderPassTwo(float current_time) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-void Draw3DSpace(float current_time, mat4 mv) {
-	ivec2 win_size = ivec2(1024, 768);	
-	
+void Draw3DSpace(float current_time) {
+	ivec2 win_size = ivec2(1024, 768);
+
 	mat4 projection = perspective(25.0f, window.window_aspect, 1.0f, 3000.0f);
 	vec3 facing = vec3(0.0f, 0.0f, 0.0f);
     vec3 up = vec3(0.0f, 1.0f, 0.0f);
     vec3 position = vec3(0.0f, 0.0f, -4.0f);
+	mat4 mv(1.0);
     mat4 temp = mv;
 
 	glPolygonMode(GL_FRONT_AND_BACK, window.wireframe ? GL_LINE : GL_FILL);
-	mv = scale(mv, vec3(0.11f, 0.11f, 0.11f));
+	/*mv = scale(mv, vec3(0.11f, 0.11f, 0.11f));
 	mv = translate(mv, vec3(0.0, 0.0f, 150.0f));
-	mat4 splineMV = mv;
-		
-	//splineMV = rotate(splineMV, window.splineRotation, vec3(0, 1, 0));
-	//splineMV = rotate(splineMV, window.splineRotation, vec3(0, 0, 1));
-	splineMV  = rotate(splineMV, window.camera.x_offset, vec3(0, 1, 0));
-	//splineMV = rotate(splineMV, current_time*10.0f, vec3(1, 0, 0));
-	//splineMV = translate(splineMV, vec3(window.splineRotation / 10.0, 0.0f, 0.0f));
-	//spline.Draw(projection, splineMV, window.size, window.lights, 10);
-	ribbon.Draw(projection, splineMV, window.size, window.lights, 10);
+	mat4 splineMV = mv;*/
 
-	temp = translate(temp, vec3(0.0f, 0.0f, 15.0f));
-	temp = scale(temp, vec3(.25f, .25f, .25f));
-	temp = scale(temp, vec3(10.0f, 10.0f, 10.0f));
-	temp = rotate(temp, window.lastFrameTime * 10, vec3(0.0f, 1.0f, 0.0f));
+	mv = translate(mv, vec3(-2.0f, 0.0f, -15.0f));
+	mv = scale(mv, vec3(.05, .05, .05));
+		
+	
+	ribbon.Draw(projection, mv, window.size, window.lights, (window.paused ? window.time_last_pause_began : current_time) - window.total_time_paused);
+
+	//temp = translate(temp, vec3(0.0f, 0.0f, 15.0f));
+	//temp = scale(temp, vec3(.25f, .25f, .25f));
+	//temp = scale(temp, vec3(10.0f, 10.0f, 10.0f));
+	//temp = rotate(temp, window.lastFrameTime * 10, vec3(0.0f, 1.0f, 0.0f));
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-	//window.mars.Draw("ads_shader", projection, temp, win_size, window.lights, 10); 
+	//window.mars.Draw("ads_shader", projection, mv, win_size, window.lights, 10); 
 	glDisable(GL_BLEND);
 }
 
@@ -356,32 +355,9 @@ void PostProcess(float current_time) {
         view = scale(view, vec3(0.11f, 0.11f, 0.10f));
         view = translate(view, vec3(-50.0f, -50.0f, 200.0f));
         
-		window.rendertexture.Draw(1, 2, projection, view, window.size, window.lights, (window.paused ? window.time_last_pause_began : current_time) - window.total_time_paused);        
-        
-		/*projection = perspective(25.0f, window.window_aspect, 1.0f, 3000.0f);
+		window.rendertexture.Draw(1, 2, projection, view, window.size, window.lights, (window.paused ? window.time_last_pause_began : current_time) - window.total_time_paused);  
 
-		glPolygonMode(GL_FRONT_AND_BACK, window.wireframe ? GL_LINE : GL_FILL);
-		mv = scale(mv, vec3(0.11f, 0.11f, 0.11f));
-		mv = translate(mv, vec3(0.0, 0.0f, 150.0f));
-		mat4 splineMV = mv;
-		
-		//splineMV = rotate(splineMV, window.splineRotation, vec3(0, 1, 0));
-		//splineMV = rotate(splineMV, window.splineRotation, vec3(0, 0, 1));
-		splineMV  = rotate(splineMV, window.camera.up_down, vec3(1, 0, 0));
-		splineMV  = rotate(splineMV, window.camera.x_offset, vec3(0, 1, 0));
-		//splineMV = translate(splineMV, vec3(window.splineRotation / 10.0, 0.0f, 0.0f));
-		spline.Draw(projection, splineMV, win_size, window.lights, 10);
-
-		temp = translate(temp, vec3(0.0f, 0.0f, 15.0f));
-		temp = scale(temp, vec3(.25f, .25f, .25f));
-		temp = scale(temp, vec3(10.0f, 10.0f, 10.0f));
-		temp = rotate(temp, window.lastFrameTime * 10, vec3(0.0f, 1.0f, 0.0f));
-		glEnable(GL_BLEND);
-		glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-		window.mars.Draw("ads_shader", projection, temp, win_size, window.lights, 10); 
-		glDisable(GL_BLEND);*/
-
-		Draw3DSpace(current_time, mv);
+		Draw3DSpace(current_time);
 
 		glFlush();
 }
@@ -474,7 +450,7 @@ int main(int argc, char * argv[])
         if(!window.rendertexture.Initialize()) {
                 return 0;
         }
-		if(!ribbon.Initialize(8)) {
+		if(!ribbon.Initialize(100)) {
 			return 0;
 		}
 

@@ -11,8 +11,8 @@ void Spline::GeneratePoints(vec3 startPoint, vec3 endPoint)
 	m_startPoint = startPoint;
 	m_endPoint = endPoint;
 	// work with control pt 1
-	m_controlPoint1 = (2.0f/3.0f)*m_startPoint + (1.0f/3.0f)*m_endPoint + vec3(0.0f, rand() % 2 - 1, rand() % 2 - 1);
-	m_controlPoint2 = (1.0f/3.0f)*m_startPoint + (2.0f/3.0f)*m_endPoint + vec3(0.0f, rand() % 2 - 1, rand() % 2 - 1);
+	m_controlPoint1 = (2.0f/3.0f)*m_startPoint + (1.0f/3.0f)*m_endPoint + vec3(0.0f, rand() % 4 - 2, rand() % 4 - 2);
+	m_controlPoint2 = (1.0f/3.0f)*m_startPoint + (2.0f/3.0f)*m_endPoint + vec3(0.0f, rand() % 4 - 2, rand() % 4 - 2);
 }
 
 //to generate spline based on last spline
@@ -21,7 +21,7 @@ void Spline::GeneratePoints(vec3 controlPoint, vec3 previousEndPoint, vec3 endPo
 	m_startPoint = previousEndPoint;
 	m_endPoint = endPoint;
 	m_controlPoint1 = m_startPoint + (previousEndPoint - controlPoint);
-	m_controlPoint2 = (1.0f/3.0f)*m_startPoint + (2.0f/3.0f)*m_endPoint + vec3(0.0f, rand() % 2 - 1, rand() % 2 - 1);
+	m_controlPoint2 = (1.0f/3.0f)*m_startPoint + (2.0f/3.0f)*m_endPoint + vec3(0.0f, rand() % 4 - 2, rand() % 4 - 2);
 }
 
 Spline::~Spline(void)
