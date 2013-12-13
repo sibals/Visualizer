@@ -14,6 +14,7 @@
     <ClCompile Include="src\background.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Cylinder.cpp" />
+    <ClCompile Include="src\EndlessSpline.cpp" />
     <ClCompile Include="src\Error.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\Globals.cpp" />
@@ -35,9 +36,11 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="src\background.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Cylinder.h" />
+    <ClInclude Include="src\EndlessSpline.h" />
     <ClInclude Include="src\Error.h" />
     <ClInclude Include="src\Framebuffer.h" />
     <ClInclude Include="src\Globals.h" />
@@ -77,6 +80,9 @@
     <None Include="shaders\stripe_model_space.vert" />
     <None Include="shaders\texture_shader.frag" />
     <None Include="shaders\texture_shader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Visualizer.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4058B364-00C8-48CB-8DD1-BF097532BB40}</ProjectGuid>

@@ -10,16 +10,15 @@
 #include "Window.h"
 #include "SoundManager.h"
 #include "Mars.h"
-#include "Spline.h"
+#include "EndlessSpline.h"
 
 using namespace std;
 using namespace glm;
 
 Window window;
 GLuint whiteTexHandle;
-SoundManager audio; 
-Mars* spheres = new Mars[64];
-Spline spline;
+SoundManager audio;
+EndlessSpline ribbon;
 
 void CloseFunc()
 {
@@ -28,7 +27,11 @@ void CloseFunc()
         window.mars.TakeDown();
         window.starfield.TakeDown();
         window.rendertexture.TakeDown();
-		spline.TakeDown();
+		ribbon.TakeDown();
+		for(int i = 0; i < 64; i++) {
+			window.spheres[i].TakeDown();
+		}
+		delete[] window.spheres;
 }
 
 void ReshapeFunc(int w, int h)
@@ -210,7 +213,7 @@ void RenderPassOne(float current_time) {
 			}
 			float transY = 20.0f * strength * weight;
 			mv = translate(mv, vec3(2.0f, transY, 0.0f));
-			spheres[i].Draw("music_shader", proj, mv, win_size, window.lights, strength * weight);
+			window.spheres[i].Draw("music_shader", proj, mv, win_size, window.lights, strength * weight);
 			mv = translate(mv, vec3(0.0, -transY, 0.0f));
 			weight += 0.3f;
 		}
@@ -285,7 +288,7 @@ void RenderPassTwo(float current_time) {
 			}
 			float transY = 20.0f * strength * weight;
 			mv = translate(mv, vec3(2.0f, transY, 0.0f));
-			spheres[i].Draw("music_shader", proj, mv, win_size, window.lights, strength * weight);
+			window.spheres[i].Draw("music_shader", proj, mv, win_size, window.lights, strength * weight);
 			mv = translate(mv, vec3(0.0, -transY, 0.0f));
 			weight += 0.3f;
 		}
@@ -312,10 +315,11 @@ void Draw3DSpace(float current_time, mat4 mv) {
 		
 	//splineMV = rotate(splineMV, window.splineRotation, vec3(0, 1, 0));
 	//splineMV = rotate(splineMV, window.splineRotation, vec3(0, 0, 1));
-	splineMV  = rotate(splineMV, window.camera.up_down, vec3(1, 0, 0));
 	splineMV  = rotate(splineMV, window.camera.x_offset, vec3(0, 1, 0));
+	//splineMV = rotate(splineMV, current_time*10.0f, vec3(1, 0, 0));
 	//splineMV = translate(splineMV, vec3(window.splineRotation / 10.0, 0.0f, 0.0f));
-	spline.Draw(projection, splineMV, window.size, window.lights, 10);
+	//spline.Draw(projection, splineMV, window.size, window.lights, 10);
+	ribbon.Draw(projection, splineMV, window.size, window.lights, 10);
 
 	temp = translate(temp, vec3(0.0f, 0.0f, 15.0f));
 	temp = scale(temp, vec3(.25f, .25f, .25f));
@@ -323,13 +327,13 @@ void Draw3DSpace(float current_time, mat4 mv) {
 	temp = rotate(temp, window.lastFrameTime * 10, vec3(0.0f, 1.0f, 0.0f));
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-	window.mars.Draw("ads_shader", projection, temp, win_size, window.lights, 10); 
+	//window.mars.Draw("ads_shader", projection, temp, win_size, window.lights, 10); 
 	glDisable(GL_BLEND);
 }
 
 void PostProcess(float current_time) {
         UpdateScene(current_time);
-		spline.Update(window.deltaTime);
+		//spline.Update(window.deltaTime);
 		
 		ivec2 win_size = ivec2(1024, 768);
 
@@ -470,7 +474,9 @@ int main(int argc, char * argv[])
         if(!window.rendertexture.Initialize()) {
                 return 0;
         }
-		spline.Initialize(5, vec3(-50.0f, 0.0f, 0.0f), vec3(50.0f, 0.0f, 0.0f)); 
+		if(!ribbon.Initialize(8)) {
+			return 0;
+		}
 
         Light light, spotlight;
         light.SetPosition(vec4(0.0f, 0.0f, 50.0f, 1.0f));
@@ -485,8 +491,9 @@ int main(int argc, char * argv[])
         window.frame_buffer.Initialize(window.size.x, window.size.y, 1);
 		window.fboSecondary.Initialize(window.size.x, window.size.y, 2);
 
+		window.spheres = new Mars[64];
 		for (int i = 0; i < 64; i++) {
-			spheres[i] = window.mars;
+			window.spheres[i] = window.mars;
 		}
 
 		audio.Initialize();

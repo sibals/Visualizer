@@ -43,6 +43,7 @@ public:
 	RenderTexture rendertexture;
 	Framebuffer frame_buffer;
 	Framebuffer fboSecondary;
+	Mars* spheres;
 
 	glm::mat4 lightPV;
 
