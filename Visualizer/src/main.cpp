@@ -147,10 +147,10 @@ void SpecialFunc(int c, int x, int y)
                 break;
 
 		case GLUT_KEY_PAGE_UP:
-				if(window.speedModifier < 2.0f) window.speedModifier += .1;
+				if(window.speedModifier < 2.0f) window.speedModifier += .1f;
 				break;
 		case GLUT_KEY_PAGE_DOWN:
-				if(window.speedModifier > 0.0f) window.speedModifier -= .1;
+				if(window.speedModifier > 0.0f) window.speedModifier -= .1f;
 				break;
 
         default:

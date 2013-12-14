@@ -23,7 +23,7 @@ void Mars::load_file(char * filename)
 	const float scalar = 0.025f;	//scalar for mars depth data
 	//Load file, error if cannot open
 	ifstream file(filename);
-	float depth;
+	//float depth;
 
 	int width; 
 	int height; 
