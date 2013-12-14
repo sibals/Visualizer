@@ -24,9 +24,6 @@
     <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Cylinder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Error.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -93,9 +90,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Cylinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Error.h">
@@ -197,12 +191,6 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\spotlight_wireframe_shader.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="shaders\stripe_model_space.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="shaders\stripe_model_space.vert">
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\texture_shader.frag">

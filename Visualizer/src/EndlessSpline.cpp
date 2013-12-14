@@ -27,7 +27,6 @@ bool EndlessSpline::Initialize(int numSplines)
 
 	ConcatenateSplinePoints();
 	CreateBezier();
-	//m_bezierPoints = m_splinePoints;
 	BuildMesh(m_bezierPoints.size(), RIBBON_COLUMNS, 8.0f);
 	super::Initialize(10.0f);
 
@@ -36,6 +35,7 @@ bool EndlessSpline::Initialize(int numSplines)
 	return true;
 }
 
+// uses the qeueue to make a vector of points that make a mesh
 void EndlessSpline::ConcatenateSplinePoints()
 {
 	m_splinePoints.clear();
@@ -47,7 +47,7 @@ void EndlessSpline::ConcatenateSplinePoints()
 	m_splinePoints.push_back(splineToConcatenate->m_startPoint);
 
 	while(!tempQueue.empty()) {
-		if(m_splinePoints.size() != 1) {
+		if(m_splinePoints.size() != 1) { // only if not the first one
 			splineToConcatenate = tempQueue.front();
 			tempQueue.pop();
 		}
@@ -63,6 +63,7 @@ void EndlessSpline::CreateBezier()
 	int itr = 0;
 	int index = 0;
 	while (itr < int(m_splinePoints.size()) - 4) {
+		// four points at a time, iterating by one point 
 		vec3 a = m_splinePoints[index];
 		index = (index + 1) % m_splinePoints.size();
 		vec3 b = m_splinePoints[index];
@@ -75,8 +76,9 @@ void EndlessSpline::CreateBezier()
 
 		for (int i = 0; i < SPLINE_COMPLEXITY; i++) {
 			vec3 p;
-			float t = static_cast<float>(i)/float(SPLINE_COMPLEXITY);
+			float t = static_cast<float>(i)/float(SPLINE_COMPLEXITY); // between 0 and 1
 
+			// catmull rom takes in 4 control points, make s curve between middle 2
 			p = catmullRom(a, b, c, d, t);
 
 			m_bezierPoints.push_back(p);
@@ -138,11 +140,6 @@ void EndlessSpline::BuildMesh(int columns, int rows, float width)
 		}
 	}
 
-	//restuff buffers with updated positions
-    //glBindVertexArray(this->vertex_array_handle);
-    //glBindBuffer(GL_ARRAY_BUFFER, this->vertex_coordinate_handle);
-    //glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(VertexAttributesPCNT), &this->vertices[0], GL_STATIC_DRAW);
-
 	this->CalculateNormals(size.x, size.y);
 }
 
@@ -152,6 +149,7 @@ void EndlessSpline::Update(float deltaTime, mat4 view)
 
 	m_splineMV = translate(m_splineMV, vec3(-x_translation, 0.0f, 0.0f));
 	
+	// ideas toward infinite spline
 	/*if(fmod(floor(x_translation), 10.0) == 0.0f) {
 		Spline splineToAdd;
 		Spline* lastSpline = m_splineQueue.back();
@@ -188,22 +186,22 @@ void EndlessSpline::Draw(const mat4 & projection, mat4 view, const ivec2 & size,
         mat4 mvp = projection * m_splineMV * model;
         mat3 nm = inverse(transpose(mat3(m_splineMV)));
 
-        this->shaders[1]->Use(); //set shader to pure white for stars
-        this->GLReturnedError("Mesh::Draw - after use");
-        this->shaders[1]->CommonSetup(time, value_ptr(size), value_ptr(projection), value_ptr(m_splineMV), value_ptr(mvp), value_ptr(nm));
+    this->shaders[1]->Use(); //set shader to ads for ribbons
+    this->GLReturnedError("Mesh::Draw - after use");
+    this->shaders[1]->CommonSetup(time, value_ptr(size), value_ptr(projection), value_ptr(m_splineMV), value_ptr(mvp), value_ptr(nm));
 
-        this->GLReturnedError("Mesh::Draw - after common setup");
-        glBindVertexArray(this->vertex_array_handle);
-        glPointSize(2); //change star point size
-		glDrawElements(GL_TRIANGLES
-			, this->vertex_indices.size(), GL_UNSIGNED_INT , &this->vertex_indices[0]);
-        glBindVertexArray(0);
-        this->GLReturnedError("Mesh::Draw - after draw");
+    this->GLReturnedError("Mesh::Draw - after common setup");
+    glBindVertexArray(this->vertex_array_handle);
+    glPointSize(2); //change star point size
+	glDrawElements(GL_TRIANGLES
+		, this->vertex_indices.size(), GL_UNSIGNED_INT , &this->vertex_indices[0]);
+    glBindVertexArray(0);
+    this->GLReturnedError("Mesh::Draw - after draw");
 
-		glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 
-        if (this->GLReturnedError("Mesh::Draw - on exit"))
-                return;
+    if (this->GLReturnedError("Mesh::Draw - on exit"))
+            return;
 }
 
 void EndlessSpline::TakeDown()
