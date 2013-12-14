@@ -16,7 +16,7 @@ SoundManager::~SoundManager()
 
 bool SoundManager::Initialize() {
 	this->m_bpm = 0.0f;
-	song = fmod.LoadSong("audio/Song5.mp3", FMOD_SOFTWARE);
+	song = fmod.LoadSong("audio/Song8.mp3", FMOD_SOFTWARE);
     song.Start(true);
  
     // Load song

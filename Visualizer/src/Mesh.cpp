@@ -309,9 +309,11 @@ bool Mesh::Initialize(float size)
 	if (!this->post_normal.Initialize("shaders/post_process.vert", "shaders/post_process.frag"))
 		return false;
 
-	if (!this->pattern_shader.Initialize("shaders/pattern_shader.vert", "shaders/pattern_shader.frag"))
+	if (!this->screen_pattern_shader.Initialize("shaders/pattern_shader.vert", "shaders/pattern_shader.frag"))
 		return false;
 
+	if(!this->eye_pattern_shader.Initialize("shaders/stripe_model_space.vert", "shaders/stripe_model_space.frag")) 
+		return false;
 
 	this->shaders.push_back(&this->shader);
 	this->shaders.push_back(&this->ads_shader);
@@ -321,7 +323,8 @@ bool Mesh::Initialize(float size)
 	
 	//post processing starts here - index 5
 	this->shaders.push_back(&this->post_normal);
-	this->shaders.push_back(&this->pattern_shader);
+	this->shaders.push_back(&this->screen_pattern_shader);
+	this->shaders.push_back(&this->eye_pattern_shader);
 
 
 
@@ -341,7 +344,8 @@ void Mesh::TakeDown()
 	this->texture_shader.TakeDown();
 	this->spotlight_shader.TakeDown();
 	this->post_normal.TakeDown();
-	this->pattern_shader.TakeDown();
+	this->screen_pattern_shader.TakeDown();
+	this->eye_pattern_shader.TakeDown();
 	super::TakeDown();
 }
 
@@ -378,8 +382,12 @@ void Mesh::Draw(string shaderName, const mat4 & projection, mat4 view, const ive
 		this->shader_index = 5;
 	} else if (shaderName == "solid_shader") {
 		this->shader_index = 2;	
-	} else if (shaderName == "pattern_shader") {
+	} else if (shaderName == "screen_pattern_shader") {
 		this->shader_index = 6;
+	} else if (shaderName == "eye_pattern_shader") {
+		this->shader_index = 7;
+	} else if (shaderName == "texture_shader") {
+		this->shader_index = 3;
 	} else {
 		this->shader_index = 0;
 	}
@@ -389,12 +397,12 @@ void Mesh::Draw(string shaderName, const mat4 & projection, mat4 view, const ive
 	this->shaders[this->shader_index]->CommonSetup(time, value_ptr(size), value_ptr(projection), value_ptr(view), value_ptr(mvp), value_ptr(nm));
 
 	//printf("Shader Index: %i\n", shader_index);
-	if(shader_index == 2)
-		this->texture_shader.CustomSetup(5, lights.GetPosition(0));
 	if(shader_index == 3)
-		this->spotlight_wireframe_shader.CustomSetup(3, time, size, projection, view, mvp, nm, lights, 2, cutoff_angle);
+		this->texture_shader.CustomSetup(3, lights.GetPosition(0));
 	if(shader_index == 4)
-		this->post_normal.CustomSetup(3, 3);
+		this->spotlight_wireframe_shader.CustomSetup(3, time, size, projection, view, mvp, nm, lights, 2, cutoff_angle);
+	if(shader_index == 5)
+		this->post_normal.CustomSetup(1, 2);
 
 
 	this->GLReturnedError("Mesh::Draw - after common setup");

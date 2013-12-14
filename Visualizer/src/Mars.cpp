@@ -11,8 +11,8 @@ bool Mars::Initialize(float size, char * mars_filename, char * mars_texture_file
 
 	super::Initialize(size);
 
-	LoadTexture(mars_texture_filename);
-	//LoadTexture("assets/perry.jpg");
+	//LoadTexture(mars_texture_filename);
+	LoadTexture("assets/Space.jpg");
 
 	return true;
 }
@@ -28,7 +28,7 @@ void Mars::load_file(char * filename)
 	int width; 
 	int height; 
 	if(!file.is_open()) {
-		cerr << "could not open mars.txt file" << endl;
+		//cerr << "could not open mars.txt file" << endl;
 		width = 20;
 		height = 20;
 	}

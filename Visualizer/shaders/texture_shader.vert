@@ -16,7 +16,7 @@ out vec2 texture_coord;
 
 void main()
 {
-	color = vertex_color;
+	color = vertex_color * vec3(1.0f, 0.0f, 0.0f);
 	normal = normalize(normal_matrix * vertex_normal);
 	position = vec3(modelview_matrix * vec4(vertex_position,1.0));
 	texture_coord = vertex_texture;

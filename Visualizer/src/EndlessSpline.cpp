@@ -28,7 +28,7 @@ bool EndlessSpline::Initialize(int numSplines)
 	ConcatenateSplinePoints();
 	CreateBezier();
 	//m_bezierPoints = m_splinePoints;
-	BuildMesh(m_bezierPoints.size(), RIBBON_COLUMNS, 5.0f);
+	BuildMesh(m_bezierPoints.size(), RIBBON_COLUMNS, 8.0f);
 	super::Initialize(10.0f);
 
 	delete[] splineArray;
@@ -157,7 +157,7 @@ void EndlessSpline::Update(float deltaTime, mat4 view)
 		Spline* lastSpline = m_splineQueue.back();
 
 		m_splineQueue.pop();
-
+K
 		splineToAdd.GeneratePoints(lastSpline->m_controlPoint2, lastSpline->m_endPoint, lastSpline->m_endPoint + vec3(rand() % 10 + 5, rand() % 4 - 2, rand() % 4 - 2));
 
 		printf("lastSpline ends @ (%f, %f, %f)\nsplineToAdd starts @ (%f, %f, %f)\n\n", lastSpline->m_endPoint.x, lastSpline->m_endPoint.y, lastSpline->m_endPoint.z,

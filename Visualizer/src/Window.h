@@ -33,6 +33,7 @@ public:
 	float splineRotation;
 	float beatDetectorRotation;
 	float beatDetectorRotationSpeed;
+	float speedModifier;
 
 	Background background;
 	Mesh mesh;

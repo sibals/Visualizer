@@ -16,6 +16,7 @@ Window::Window()
 	this->splineRotation = 0.0f;
 	this->beatDetectorRotation = 0.0f;
 	this->beatDetectorRotationSpeed = 100.0f;
+	this->speedModifier = 1.0f;
 	mode = 0;
 }
 Window::~Window()

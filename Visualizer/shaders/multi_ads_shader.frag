@@ -8,9 +8,9 @@ flat in vec3 color;
 in vec3 position;
 in vec3 normal;
 
-uniform float shininess = 100.0f;
+uniform float shininess = 10f;
 const vec3 light_position_one = vec3(10.0, 15.0, 0.0);
-const vec3 light_position_two = vec3(-20.0, 0.0, 0.0);
+const vec3 light_position_two = vec3(-30.0, -10.0, 0.0);
 
 vec3 ads( )
 {

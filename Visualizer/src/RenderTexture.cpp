@@ -7,10 +7,12 @@ RenderTexture::~RenderTexture() {
 }
 
 void RenderTexture::StepPostEffect() {
-	this->curr_shader_index = ++this->curr_shader_index % this->shaders.size();
+	/*this->curr_shader_index = ++this->curr_shader_index % this->shaders.size();
 	while(this->curr_shader_index < 6) {
 		this->curr_shader_index = ++this->curr_shader_index % this->shaders.size();
-	}
+	}*/
+	if(this->curr_shader_index == 5) this->curr_shader_index = 6;
+	else this->curr_shader_index = 5;
 }
 
 bool RenderTexture::Initialize() {

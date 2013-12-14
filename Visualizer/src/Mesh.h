@@ -34,7 +34,8 @@ public:
 	Shader shader;
 	Shader ads_shader;
 	Shader solid_color;
-	Shader pattern_shader;
+	Shader screen_pattern_shader;
+	Shader eye_pattern_shader;
 	RenderTextureShader render_texture;
 	TextureShader texture_shader;
 	SpotlightWireframeShader spotlight_shader;

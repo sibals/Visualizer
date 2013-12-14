@@ -19,6 +19,7 @@ Window window;
 GLuint whiteTexHandle;
 SoundManager audio;
 EndlessSpline ribbon;
+Mars hiResSphere;
 
 void CloseFunc()
 {
@@ -32,6 +33,7 @@ void CloseFunc()
 			window.spheres[i].TakeDown();
 		}
 		delete[] window.spheres;
+		hiResSphere.TakeDown();
 }
 
 void ReshapeFunc(int w, int h)
@@ -143,6 +145,13 @@ void SpecialFunc(int c, int x, int y)
         case GLUT_KEY_RIGHT:
                 window.camera.x_offset += 1.0f;
                 break;
+
+		case GLUT_KEY_PAGE_UP:
+				if(window.speedModifier < 2.0f) window.speedModifier += .1;
+				break;
+		case GLUT_KEY_PAGE_DOWN:
+				if(window.speedModifier > 0.0f) window.speedModifier -= .1;
+				break;
 
         default:
                 cout << "unhandled special key: " << c << endl;
@@ -314,20 +323,46 @@ void Draw3DSpace(float current_time) {
 	mv = translate(mv, vec3(0.0, 0.0f, 150.0f));
 	mat4 splineMV = mv;*/
 
-	mv = translate(mv, vec3(-2.0f, 0.0f, -15.0f));
-	mv = scale(mv, vec3(.05, .05, .05));
-		
-	
-	ribbon.Draw(projection, mv, window.size, window.lights, (window.paused ? window.time_last_pause_began : current_time) - window.total_time_paused);
+	mv = translate(mv, vec3(0.0f, 0.0f, -20.0f));
+	mat4 defMV = mv;
 
-	//temp = translate(temp, vec3(0.0f, 0.0f, 15.0f));
-	//temp = scale(temp, vec3(.25f, .25f, .25f));
-	//temp = scale(temp, vec3(10.0f, 10.0f, 10.0f));
-	//temp = rotate(temp, window.lastFrameTime * 10, vec3(0.0f, 1.0f, 0.0f));
+	// Sphere with pattern
+	mv = scale(mv, vec3(3.5f, 3.5f, 3.5f));
+	mv = translate(mv, vec3(-1, -.5f, -1));
+	mv = rotate(mv, ((window.paused ? window.time_last_pause_began * 10 : current_time * 10) - window.total_time_paused)  * window.speedModifier, vec3(0,1,0));
+	window.mars.Draw("eye_pattern_shader", projection, mv, win_size, window.lights, 10); 
+
+	// post sphere
+	mv = defMV;
+	mv = translate(mv, vec3(4.0f, 0.0f, 2.0f));
+	mv = scale(mv, vec3(2.0f, 2.0f, 2.0f));
+	mat4 smallmv = mv;
+	mv = rotate(mv, -((window.paused ? window.time_last_pause_began * 10 : current_time * 5) - window.total_time_paused) * window.speedModifier, vec3(0,1,0));
+	window.mars.Draw("ads_shader", projection, mv, window.size, window.lights, 0.0f);
+	smallmv = translate(smallmv, vec3(0.1f, -0.2f, 0.5f));
+	smallmv = scale(smallmv, vec3(.3f, .3f, .3f));
+	hiResSphere.Draw("post_process", projection, smallmv, window.size, window.lights, 0.0f);
+
+	// two splines
+	mv = defMV;
+	mv = scale(mv, vec3(.05, .05, .05));
+	mv = rotate(mv, 90.0f, vec3(0,1,0));
+
+	mat4 spline1_mv = translate(mv, vec3(0.0f, 20.0f, -100.0f));
+	spline1_mv = rotate(spline1_mv, 60.0f, vec3(0, 1, 0));
+	spline1_mv = rotate(spline1_mv, 15.0f, vec3(0, 0, 1));
+
+	mat4 spline2_mv = translate(spline1_mv, vec3(0.0f, 70.0f, 50.0f));
+	spline2_mv = rotate(spline2_mv, 20.0f, vec3(1,1,1));
+	spline2_mv = scale(spline2_mv, vec3(.3f, .3f, .3f));
+	
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-	//window.mars.Draw("ads_shader", projection, mv, win_size, window.lights, 10); 
+	ribbon.Draw(projection, spline1_mv, window.size, window.lights, ((window.paused ? window.time_last_pause_began + 40 : current_time + 40) - window.total_time_paused) * window.speedModifier);
+	ribbon.Draw(projection, spline2_mv, window.size, window.lights, ((window.paused ? window.time_last_pause_began + 90 : current_time + 90) - window.total_time_paused) * window.speedModifier);
 	glDisable(GL_BLEND);
+
+	
 }
 
 void PostProcess(float current_time) {
@@ -450,9 +485,11 @@ int main(int argc, char * argv[])
         if(!window.rendertexture.Initialize()) {
                 return 0;
         }
-		if(!ribbon.Initialize(100)) {
+		if(!ribbon.Initialize(1000)) {
 			return 0;
 		}
+		if(!hiResSphere.Initialize(100, default_mars, "mars.jpg"))
+			return 0;
 
         Light light, spotlight;
         light.SetPosition(vec4(0.0f, 0.0f, 50.0f, 1.0f));
