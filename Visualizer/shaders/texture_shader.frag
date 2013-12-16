@@ -31,5 +31,5 @@ vec3 ads( )
 void main()
 {
     vec4 t_color = texture2D(s_texture, texture_coord);
-	FragColor = vec4(ads(), 1.0) * t_color;
+	FragColor = t_color;
 }

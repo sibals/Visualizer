@@ -12,7 +12,7 @@ bool Mars::Initialize(float size, char * mars_filename, char * mars_texture_file
 	super::Initialize(size);
 
 	//LoadTexture(mars_texture_filename);
-	LoadTexture("assets/Space.jpg");
+	LoadTexture("assets/purple.jpg");
 
 	return true;
 }
@@ -29,10 +29,12 @@ void Mars::load_file(char * filename)
 	int height; 
 	if(!file.is_open()) {
 		//cerr << "could not open mars.txt file" << endl;
-		width = 20;
-		height = 20;
-	}
-	else {
+		width = 100;
+		height = 100;
+	} else if (filename == "large") {
+		width = 500;
+		height = 500;
+	} else {
 		//Read first line with longitude and latitude information
 		file >> width;
 		file >> height;

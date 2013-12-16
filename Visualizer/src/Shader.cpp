@@ -423,43 +423,8 @@ void SpotlightWireframeShader::CustomSetup(int texture_id, const float time, con
 		vec4(w2+0, h2+0, 0.0f, 1.0f));
 	prog.setUniform("ViewportMatrix", viewport_matrix);
 
-	prog.setUniform("Kd", 0.9f, 0.5f, 0.3f);
-    prog.setUniform("Ks", 0.1f, 0.1f, 0.1f);
-    //prog.setUniform("Ka", 0.9f * 0.3f, 0.5f * 0.3f, 0.3f * 0.3f);
-    prog.setUniform("Ka", 0.0f, 0.0f, 0.0f);
-    prog.setUniform("Shininess", 10.0f);
 
 	prog.setUniform("s_texture", texture_id);	//Found
-	
-	switch(wireframe_mode)
-	{
-	case 1:
-		prog.setUniform("Line.Width", 0.5f);
-		prog.setUniform("Line.Color", vec4(0.0f,0.0f,1.0f,1.0f));
-		break;
-	case 2:
-		prog.setUniform("Line.Width", 2.0f);
-		prog.setUniform("Line.Color", vec4(0.5f,0.0f,0.5f,1.0f));
-		break;
-	case 3:
-		prog.setUniform("Line.Width", 0.2f);
-		prog.setUniform("Line.Color", vec4(0.2f,0.2f,0.2f,1.0f));
-		break;
-	case 0:
-	default:
-		prog.setUniform("Line.Width", -1.0f);
-	prog.setUniform("Line.Color", vec4(0.0f,0.0f,1.0f,1.0f));
-	}
-
-	prog.setUniform("Spot.intensity", vec3(1.0f,1.0f,1.0f));
-
-	prog.setUniform("Spot.exponent", 100.0f);
-
-	prog.setUniform("Spot.cutoff", cut_off);	//Found
-	
-	prog.setUniform("Spot.position", lights.GetRawPosition(1));	//Found
-	prog.setUniform("Spot.direction", lights.GetRawDirection(1));	//Found
-	prog.setUniform("light_position", vec3(lights.GetPosition(0)));	//Found
 }
 
 void SpotlightWireframeShader::TakeDown()

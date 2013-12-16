@@ -205,6 +205,12 @@
     <None Include="shaders\pattern_shader.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="shaders\stripe_model_space.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\stripe_model_space.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Visualizer.rc">

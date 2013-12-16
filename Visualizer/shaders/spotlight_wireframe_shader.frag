@@ -12,7 +12,7 @@ flat in vec3 Gcolor;
 in vec2 Gtexture;
 noperspective in vec3 GEdgeDistance;
 
-struct SpotLightInfo {
+/*struct SpotLightInfo {
     vec4 position;   // Gposition in eye coords
     vec3 intensity;  // Amb., Diff., and Specular intensity
     vec3 direction;  // Direction of the spotlight in eye coords.
@@ -32,12 +32,12 @@ uniform struct LineInfo {
 	float Width;
 	vec4 Color;
 } Line;
-
+*/
 uniform sampler2D s_texture;
 
 layout( location = 0 ) out vec4 FragColor;
 
-vec3 adsWithSpotlight( )
+/*vec3 adsWithSpotlight( )
 {
     vec3 s = normalize( vec3( Spot.position) - Gposition );
     vec3 spotDir = normalize( Spot.direction);
@@ -59,7 +59,7 @@ vec3 adsWithSpotlight( )
     } else {
         return ambient;
     }
-}
+}*/
 
 /*
 vec3 ads( vec3 pos, vec3 norm ) {
@@ -78,7 +78,7 @@ vec3 ads( vec3 pos, vec3 norm ) {
 }
 */
 
-vec3 ads( )
+/*vec3 ads( )
 {
   vec3 n = Gnormal;
 
@@ -92,7 +92,7 @@ vec3 ads( )
   float s_dot_n = max(dot(s, n), 0.0);
 
   return Gcolor * s_dot_n + (s_dot_n > 0 ? Gcolor * pow(max(dot(r, v), 0.0), Shininess) : vec3(0.0));
-}
+}*/
 
 void main() {
 
@@ -100,24 +100,24 @@ void main() {
     float d = min( GEdgeDistance.x, GEdgeDistance.y );
     d = min( d, GEdgeDistance.z );
 
-    float mixVal;
-    if( d < Line.Width - 1 ) {
+	float mixVal;
+	float lineWidth = 1.0;
+    if( d < lineWidth - 1 ) {
         mixVal = 1.0;
-    } else if( d > Line.Width + 1 ) {
+    } else if( d > lineWidth + 1 ) {
         mixVal = 0.0;
     } else {
-        float x = d - (Line.Width - 1);
+        float x = d - (lineWidth - 1);
         mixVal = exp2(-2.0 * (x*x));
     }
+    
 
-	//calculate the color value with ADS, 
     vec4 t_color = texture2D(s_texture, Gtexture);
 	vec4 line_color = t_color;
-	t_color.w = 0.25;
-	//vec4 lit_color = vec4(ads(), 1.0) * t_color * vec4(Gcolor, 1.0);
-	//vec4 lit_color2 = vec4(adsWithSpotlight() * Gcolor, 1.0);
+	t_color.b = t_color.b * 0.25;
+	t_color.w = 0.4;
 
-	//FragColor = lit_color + lit_color2;
-	vec4 lineC = line_color;
+	vec4 lineC = line_color * 2;
+	lineC.w = 0.5;
 	FragColor = mix(t_color, lineC, mixVal); 
 }

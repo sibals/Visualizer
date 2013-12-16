@@ -8,7 +8,8 @@ flat in vec3 color;
 in vec3 position;
 in vec3 normal;
 
-uniform float shininess = 10f;
+uniform float shininess = 10;
+uniform float time;
 const vec3 light_position_one = vec3(10.0, 15.0, 0.0);
 const vec3 light_position_two = vec3(-30.0, -10.0, 0.0);
 
@@ -20,7 +21,7 @@ vec3 ads( )
 	n = -n;
 
   // Variables named as such because compiler would not have it when overwriting same variables
-
+  
   vec3 s_1 = normalize(light_position_one - position);
   vec3 v_1 = normalize(-position);
   vec3 r_1 = reflect(-s_1, n);

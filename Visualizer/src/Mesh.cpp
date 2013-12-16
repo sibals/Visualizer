@@ -342,7 +342,7 @@ void Mesh::TakeDown()
 	this->ads_shader.TakeDown();
 	this->solid_color.TakeDown();
 	this->texture_shader.TakeDown();
-	this->spotlight_shader.TakeDown();
+	this->spotlight_wireframe_shader.TakeDown();
 	this->post_normal.TakeDown();
 	this->screen_pattern_shader.TakeDown();
 	this->eye_pattern_shader.TakeDown();
@@ -388,6 +388,8 @@ void Mesh::Draw(string shaderName, const mat4 & projection, mat4 view, const ive
 		this->shader_index = 7;
 	} else if (shaderName == "texture_shader") {
 		this->shader_index = 3;
+	} else if (shaderName == "geometry_shader"){
+		this->shader_index = 4;
 	} else {
 		this->shader_index = 0;
 	}
@@ -400,7 +402,7 @@ void Mesh::Draw(string shaderName, const mat4 & projection, mat4 view, const ive
 	if(shader_index == 3)
 		this->texture_shader.CustomSetup(3, lights.GetPosition(0));
 	if(shader_index == 4)
-		this->spotlight_wireframe_shader.CustomSetup(3, time, size, projection, view, mvp, nm, lights, 2, cutoff_angle);
+		this->spotlight_wireframe_shader.CustomSetup(1, time, size, projection, view, mvp, nm, lights, 2, cutoff_angle);
 	if(shader_index == 5)
 		this->post_normal.CustomSetup(1, 2);
 

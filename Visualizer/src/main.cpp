@@ -329,19 +329,48 @@ void Draw3DSpace(float current_time) {
 	// Sphere with pattern
 	mv = scale(mv, vec3(3.5f, 3.5f, 3.5f));
 	mv = translate(mv, vec3(-1, -.5f, -1));
-	mv = rotate(mv, ((window.paused ? window.time_last_pause_began * 10 : current_time * 10) - window.total_time_paused)  * window.speedModifier, vec3(0,1,0));
-	window.mars.Draw("eye_pattern_shader", projection, mv, win_size, window.lights, 10); 
+	mv = rotate(mv, ((window.paused ? window.time_last_pause_began : current_time) - window.total_time_paused) , vec3(0,1,0));
+	//window.mars.Draw("eye_pattern_shader", projection, mv, win_size, window.lights, window.beatDetectorRotation); 
 
 	// post sphere
 	mv = defMV;
-	mv = translate(mv, vec3(4.0f, 0.0f, 2.0f));
-	mv = scale(mv, vec3(2.0f, 2.0f, 2.0f));
+	mv = translate(mv, vec3(0.0f, 0.0f, 2.0f));
+	mv = scale(mv, vec3(1.0f, 1.0f, 1.0f));
 	mat4 smallmv = mv;
-	mv = rotate(mv, -((window.paused ? window.time_last_pause_began * 10 : current_time * 5) - window.total_time_paused) * window.speedModifier, vec3(0,1,0));
-	window.mars.Draw("ads_shader", projection, mv, window.size, window.lights, 0.0f);
-	smallmv = translate(smallmv, vec3(0.1f, -0.2f, 0.5f));
-	smallmv = scale(smallmv, vec3(.3f, .3f, .3f));
+	mat4 smallmv2 = mv;
+	mat4 smallmv3 = mv;
+	mat4 smallmv4 = mv;
+	mat4 smallmv5 = mv;
+
+
+	smallmv = rotate(mv, -window.beatDetectorRotation, vec3(1,1,0));
+	smallmv = translate(smallmv, vec3(0.1f, -0.2f, 1.0f));
+	float scalar = audio.GetBars(0) * 0.25f;
+	smallmv = scale(smallmv, vec3(.7f, .7f, .7f));
+
+	//smallmv2 = rotate(mv, window.beatDetectorRotation * 1, vec3(0,1,1));
+	smallmv2 = translate(smallmv2, vec3(0.1f, 0.0f, -2.0f + scalar));
+	scalar *= 3.0f;
+	smallmv2 = scale(smallmv2, vec3(.5f + .9f * scalar, .5f + .9f * scalar, .5f + .9f * scalar));
+	scalar /= 3.0f;
+	smallmv3 = rotate(mv, window.beatDetectorRotation, vec3(1,1,0));
+	smallmv3 = translate(smallmv3, vec3(0.1f, -0.2f, 2.0f));
+	smallmv3 = scale(smallmv3, vec3(.3f, .3f, .3f));
+
+	smallmv4 = rotate(mv, -window.beatDetectorRotation, vec3(0,1,1));
+	smallmv4 = translate(smallmv4, vec3(0.1f, -0.2f, 3.0f));
+	smallmv4 = scale(smallmv4, vec3(.3f, .3f, .3f));
+
+	smallmv5 = rotate(mv, -window.beatDetectorRotation, vec3(1,1, 0));
+	smallmv5 = translate(smallmv5, vec3(0.1f, -0.2f, 4.0f));
+	smallmv5 = scale(smallmv5, vec3(1.2f, 1.2f, 1.2f));
+
+
 	hiResSphere.Draw("post_process", projection, smallmv, window.size, window.lights, 0.0f);
+	hiResSphere.Draw("screen_pattern_shader", projection, smallmv2, window.size, window.lights, (window.paused ? window.time_last_pause_began : current_time) - window.total_time_paused);
+	hiResSphere.Draw("texture_shader", projection, smallmv3, window.size, window.lights, window.beatDetectorRotation);
+	hiResSphere.Draw("ads_shader", projection, smallmv4, window.size, window.lights, window.beatDetectorRotation);
+	hiResSphere.Draw("eye_pattern_shader", projection, smallmv5, win_size, window.lights, 360 * scalar);
 
 	// two splines
 	mv = defMV;
@@ -358,8 +387,8 @@ void Draw3DSpace(float current_time) {
 	
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-	ribbon.Draw(projection, spline1_mv, window.size, window.lights, ((window.paused ? window.time_last_pause_began + 40 : current_time + 40) - window.total_time_paused) * window.speedModifier);
-	ribbon.Draw(projection, spline2_mv, window.size, window.lights, ((window.paused ? window.time_last_pause_began + 90 : current_time + 90) - window.total_time_paused) * window.speedModifier);
+	ribbon.Draw(projection, spline1_mv, window.size, window.lights, ((window.paused ? window.time_last_pause_began + 45 : current_time + 45) - window.total_time_paused));
+	ribbon.Draw(projection, spline2_mv, window.size, window.lights, ((window.paused ? window.time_last_pause_began + 180: current_time + 180) - window.total_time_paused));
 	glDisable(GL_BLEND);
 
 	
@@ -488,7 +517,7 @@ int main(int argc, char * argv[])
 		if(!ribbon.Initialize(1000)) {
 			return 0;
 		}
-		if(!hiResSphere.Initialize(100, default_mars, "mars.jpg"))
+		if(!hiResSphere.Initialize(100, "large", "nil"))
 			return 0;
 
         Light light, spotlight;

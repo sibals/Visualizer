@@ -19,24 +19,42 @@ precision highp float;
 uniform float time;
 uniform ivec2 size;
 
-void main(void)
+
+void main( void ) 
 {
-	//	modification to adapt to current example
-	vec2 resolution = vec2(size);
-	vec2 u=(gl_FragCoord.xy/resolution.x)*2.0-vec2(1.0,resolution.y/resolution.x);
-	float t=time*0.5;
-	
-	float tt=sin(t/8.0)*64.0;
-	float x=u.x*tt+sin(t*2.1)*4.0;
-	float y=u.y*tt+cos(t*2.3)*4.0;
-	float c=sin(x)+sin(y);
-	float zoom=sin(t);
-	x=x*zoom*2.0+sin(t*1.1);
-	y=y*zoom*2.0+cos(t*1.3);
-	float xx=cos(t*0.7)*x-sin(t*0.7)*y;
-	float yy=sin(t*0.7)*x+cos(t*0.7)*y;
-	c=(sin(c+(sin(xx)+sin(yy)))+1.0)*0.4;
-	float v=2.0-length(u)*2.0;
-	//	Modification to adapt to current example
-	FragColor=vec4(v*vec3(c+v*0.4,c*c-0.5+v*0.5,c*1.9),1.0);
+  vec2 resolution = size;
+
+  vec2 uPos = ( gl_FragCoord.xy / resolution.xy );
+
+  uPos.x -= 10.5;
+  uPos.y -= -0.0;
+
+  vec3 color = vec3(0.0);
+
+  float vertColor = 0.0;
+
+  for( float i = 0.0; i < 10.0; ++i )
+  {
+    float t = time * (0.75);
+  
+    uPos.y -= ( (sin(cos( uPos.y*(i+2.0) + t+i/2.0)) * 0.2) - (tan(cos( uPos.y*(i+0.25) + t+i/0.25)) * 0.15));
+    uPos.x += ( (tan(cos( uPos.x*(i+2.0) + t+i/2.0)) * 0.2) - (sin(cos( uPos.y*(i+0.25) + t+i/0.25)) * 0.15));
+
+    uPos.y -= ( (sin(cos( uPos.y*(i+2.0) + t+i/2.0)) * 0.2) - (tan(cos( uPos.y*(i+0.25) + t+i/0.25)) * 0.15));
+    uPos.x += ( (tan(cos( uPos.x*(i+2.0) + t+i/2.0)) * 0.2) - (sin(tan( uPos.y*(i+0.25) + t+i/0.25)) * 0.15));
+
+    float fTemp = abs(1.0 / (uPos.y * uPos.x) / 800.0);
+
+    vertColor *= fTemp;
+
+    color += vec3( 0.005, sin(fTemp*(1.0-i)/10.0), fTemp*i/55.0 );
+
+	vec2 mouse = vec2(1, 1);
+    uPos = ((gl_FragCoord.xy - (resolution * 0.5)) / min(resolution.y,resolution.x) * 1.0) * mouse.xy * 10.0;
+  }
+  
+  vec4 color_final = vec4(color, 1.0);
+
+  gl_FragColor = color_final;
+
 }

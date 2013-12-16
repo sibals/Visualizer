@@ -2,9 +2,9 @@
 #include <glm/gtx/spline.hpp>
 #include <iostream>
 
-static const int SPLINE_COMPLEXITY = 10;
+static const int SPLINE_COMPLEXITY = 2;
 static const int RIBBON_COLUMNS = 2;
-static const float MOVEMENT_MULTIPLIER = 10.0f;
+static const float MOVEMENT_MULTIPLIER = 5.0f;
 
 EndlessSpline::EndlessSpline(void)
 {
@@ -186,10 +186,11 @@ void EndlessSpline::Draw(const mat4 & projection, mat4 view, const ivec2 & size,
         mat4 mvp = projection * m_splineMV * model;
         mat3 nm = inverse(transpose(mat3(m_splineMV)));
 
-    this->shaders[1]->Use(); //set shader to ads for ribbons
+    this->shaders[4]->Use(); //set shader to ads for ribbons
     this->GLReturnedError("Mesh::Draw - after use");
-    this->shaders[1]->CommonSetup(time, value_ptr(size), value_ptr(projection), value_ptr(m_splineMV), value_ptr(mvp), value_ptr(nm));
+    this->shaders[4]->CommonSetup(time, value_ptr(size), value_ptr(projection), value_ptr(m_splineMV), value_ptr(mvp), value_ptr(nm));
 
+	this->spotlight_wireframe_shader.CustomSetup(1, time, size, projection, view, mvp, nm, lights, 2, cutoff_angle);
     this->GLReturnedError("Mesh::Draw - after common setup");
     glBindVertexArray(this->vertex_array_handle);
     glPointSize(2); //change star point size

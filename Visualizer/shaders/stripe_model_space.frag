@@ -9,6 +9,7 @@ in vec3 modeling_position;
 
 const float shininess = 4.0f;
 uniform vec3 light_position;
+uniform float time;
 
 vec3 c;
 
@@ -112,7 +113,7 @@ float snoise(vec3 v)
 // Mix final noise value
   vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
   m = m * m;
-  return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
+  return time * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
                                 dot(p2,x2), dot(p3,x3) ) );
 }
 
@@ -124,8 +125,8 @@ vec3 ads( )
 
 	x = clamp(x * 20.0, -20, 20);
 
-	vec3 color_1 = (int(abs(x)) % 2 == 0) ? vec3(0.6, 0.0, 0.0) : vec3(0.3, 0.2, 0.5);
-	vec3 color_2 = (int(abs(x)) % 2 == 1) ? vec3(0.6, 0.0, 0.0) : vec3(0.3, 0.2, 0.5);
+	vec3 color_1 = (int(abs(x)) % 2 == 0) ? vec3(0.1 + 0.25 * time, 0.0, 0.7) : vec3(0.1 + 0.25 * time, 0.0, 0.7);
+	vec3 color_2 = (int(abs(x)) % 2 == 1) ? vec3(0.6, 0.0, 0.7) : vec3(0.6, 0.0, 0.4);
 	vec3 c = mix(color_1, color_2, x > 0 ? fract(x) : fract(-x));
 
 	if (!gl_FrontFacing)
