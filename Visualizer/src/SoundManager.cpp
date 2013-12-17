@@ -145,3 +145,9 @@ float SoundManager::GetBPMEstimate()
 	//if (m_bpm < 50.0f) m_bpm = 50.0f;
 	return m_bpm;
 }
+
+void SoundManager::TakeDown()
+{
+	song.Stop();
+	fmod.~SimpleFMOD();
+}

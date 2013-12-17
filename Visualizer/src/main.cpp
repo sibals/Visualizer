@@ -19,21 +19,19 @@ Window window;
 GLuint whiteTexHandle;
 SoundManager audio;
 EndlessSpline ribbon;
+EndlessSpline ribbon2;
 Mars hiResSphere;
 
 void CloseFunc()
 {
         window.window_handle = -1;
+		window.sphere.TakeDown();
+		hiResSphere.TakeDown();
         window.background.TakeDown();
         window.mars.TakeDown();
-        window.starfield.TakeDown();
         window.rendertexture.TakeDown();
 		ribbon.TakeDown();
-		for(int i = 0; i < 64; i++) {
-			window.spheres[i].TakeDown();
-		}
-		delete[] window.spheres;
-		hiResSphere.TakeDown();
+		ribbon2.TakeDown();	
 }
 
 void ReshapeFunc(int w, int h)
@@ -51,42 +49,17 @@ void KeyboardFunc(unsigned char c, int x, int y)
 
         switch (c)
         {
-        case 'V':
-        case 'v':
-                window.camera.SetCameraType((window.camera.GetCameraType() == Camera::Type::normal) ? Camera::Type::chase : Camera::Type::normal);
-                break;
         case 'Z':
         case 'z':
-                break;
-        case 'S':
-        case 's':
-                if (window.mars.cutoff_angle == 0.0f) {
-                        window.mars.cutoff_angle = 15.0f;
-                } else {
-                        window.mars.cutoff_angle = 0.0f;
-                }
                 break;
         case 'Q':
         case 'q':
                 window.rendertexture.StepPostEffect();
                 break;
-        case 'N':
-        case 'n':
-                window.mars.EnableNormals(window.normals);
-                break;        
         case 'W':
-                window.mars.wireframe_mode++;
-                if(window.mars.wireframe_mode > 3)
-                        window.mars.wireframe_mode = 0;
-                break;
         case 'w':
                 window.wireframe = !window.wireframe;
                 break;
-        case 'o':
-        case 'O':
-                window.draw_planes = !window.draw_planes;
-                break;
-                
         case 'P':
         case 'p':
                 if (window.paused == true)
@@ -222,7 +195,7 @@ void RenderPassOne(float current_time) {
 			}
 			float transY = 20.0f * strength * weight;
 			mv = translate(mv, vec3(2.0f, transY, 0.0f));
-			window.spheres[i].Draw("music_shader", proj, mv, win_size, window.lights, strength * weight);
+			window.sphere.Draw("music_shader", proj, mv, win_size, window.lights, strength * weight);
 			mv = translate(mv, vec3(0.0, -transY, 0.0f));
 			weight += 0.3f;
 		}
@@ -297,7 +270,7 @@ void RenderPassTwo(float current_time) {
 			}
 			float transY = 20.0f * strength * weight;
 			mv = translate(mv, vec3(2.0f, transY, 0.0f));
-			window.spheres[i].Draw("music_shader", proj, mv, win_size, window.lights, strength * weight);
+			window.sphere.Draw("music_shader", proj, mv, win_size, window.lights, strength * weight);
 			mv = translate(mv, vec3(0.0, -transY, 0.0f));
 			weight += 0.3f;
 		}
@@ -360,10 +333,11 @@ void Draw3DSpace(float current_time) {
 	smallmv4 = rotate(mv, -window.beatDetectorRotation, vec3(0,1,1));
 	smallmv4 = translate(smallmv4, vec3(0.1f, -0.2f, 3.0f));
 	smallmv4 = scale(smallmv4, vec3(.3f, .3f, .3f));
-
-	smallmv5 = rotate(mv, -window.beatDetectorRotation, vec3(1,1, 0));
-	smallmv5 = translate(smallmv5, vec3(0.1f, -0.2f, 4.0f));
-	smallmv5 = scale(smallmv5, vec3(1.2f, 1.2f, 1.2f));
+	
+	smallmv5 = rotate(mv, window.beatDetectorRotation, vec3(1,0, 0));
+	//smallmv5 = rotate(mv, -window.beatDetectorRotation, vec3(1,1, 0));
+	smallmv5 = translate(smallmv5, vec3(0.1f, -0.2f, 2.5f));
+	smallmv5 = scale(smallmv5, vec3(0.8f, 0.8f, 0.8f));
 
 
 	hiResSphere.Draw("post_process", projection, smallmv, window.size, window.lights, 0.0f);
@@ -374,21 +348,33 @@ void Draw3DSpace(float current_time) {
 
 	// two splines
 	mv = defMV;
+	//mv = rotate(mv, 200.0f, vec3(1, 0, 0));
 	mv = scale(mv, vec3(.05, .05, .05));
-	mv = rotate(mv, 90.0f, vec3(0,1,0));
+	//mv = rotate(mv, 90.0f, vec3(0,1,0));
 
-	mat4 spline1_mv = translate(mv, vec3(0.0f, 20.0f, -100.0f));
-	spline1_mv = rotate(spline1_mv, 60.0f, vec3(0, 1, 0));
-	spline1_mv = rotate(spline1_mv, 15.0f, vec3(0, 0, 1));
+	mat4 spline1_mv = mv;
+	mat4 spline2_mv = mv;
+	spline1_mv = translate(spline1_mv, vec3(0.0f, 0.0f, 10.0f));
+	spline1_mv = rotate(spline1_mv, 45.0f, vec3(1,0,0));
+	spline1_mv = rotate(spline1_mv, window.beatDetectorRotation, vec3(0,1,0));
+	
+	spline2_mv = translate(spline2_mv, vec3(0.0f, 0.0f, 10.0f));
+	spline2_mv = rotate(spline2_mv, 45.0f, vec3(1,0,0));
+	spline2_mv = rotate(spline2_mv, -window.beatDetectorRotation, vec3(0,1,0));
+	//mv = defMV;
+	
+	//spline1_mv = rotate(mv, window.beatDetectorRotation, vec3(0,1,0));
+	//spline1_mv = rotate(spline1_mv, window.beatDetectorRotation, vec3(1,1,0));
+	
+	spline1_mv = scale(spline1_mv, vec3(0.1f, 0.1f, 0.5f + 5.0f * scalar));
+	spline2_mv = scale(spline2_mv, vec3(0.2f, 0.2f, 1.5f + 10.0f * scalar));
 
-	mat4 spline2_mv = translate(spline1_mv, vec3(0.0f, 70.0f, 50.0f));
-	spline2_mv = rotate(spline2_mv, 20.0f, vec3(1,1,1));
-	spline2_mv = scale(spline2_mv, vec3(.3f, .3f, .3f));
 	
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	ribbon.Draw(projection, spline1_mv, window.size, window.lights, ((window.paused ? window.time_last_pause_began + 45 : current_time + 45) - window.total_time_paused));
-	ribbon.Draw(projection, spline2_mv, window.size, window.lights, ((window.paused ? window.time_last_pause_began + 180: current_time + 180) - window.total_time_paused));
+	ribbon2.Draw(projection, spline2_mv, window.size, window.lights, ((window.paused ? window.time_last_pause_began + 45 : current_time + 45) - window.total_time_paused));
+	//ribbon.Draw(projection, spline2_mv, window.size, window.lights, ((window.paused ? window.time_last_pause_began + 180: current_time + 180) - window.total_time_paused));
 	glDisable(GL_BLEND);
 
 	
@@ -505,18 +491,24 @@ int main(int argc, char * argv[])
 
         if(!window.mars.Initialize((float)window.slices, default_mars, "mars.jpg"))
                 return 0;
-        if(!window.camera.Initialize()) {
+		
+		 if(!window.sphere.Initialize((float)window.slices, default_mars, "mars.jpg"))
                 return 0;
-        }
-        if(!window.starfield.Initialize()) {
+
+        if(!window.camera.Initialize()) {
                 return 0;
         }
         if(!window.rendertexture.Initialize()) {
                 return 0;
         }
-		if(!ribbon.Initialize(1000)) {
+		if(!ribbon.Initialize(100, ivec2(40, 20), ivec2(10, 5), ivec2(1, 0))) {
 			return 0;
 		}
+
+		if(!ribbon2.Initialize(100, ivec2(4, 2), ivec2(4, 2), ivec2(10, 5))) {
+			return 0;
+		}
+
 		if(!hiResSphere.Initialize(100, "large", "nil"))
 			return 0;
 
@@ -533,10 +525,7 @@ int main(int argc, char * argv[])
         window.frame_buffer.Initialize(window.size.x, window.size.y, 1);
 		window.fboSecondary.Initialize(window.size.x, window.size.y, 2);
 
-		window.spheres = new Mars[64];
-		for (int i = 0; i < 64; i++) {
-			window.spheres[i] = window.mars;
-		}
+		
 
 		audio.Initialize();
 		

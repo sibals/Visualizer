@@ -1,27 +1,52 @@
 #include "EndlessSpline.h"
 #include <glm/gtx/spline.hpp>
 #include <iostream>
+#include <math.h>
 
 static const int SPLINE_COMPLEXITY = 2;
 static const int RIBBON_COLUMNS = 2;
-static const float MOVEMENT_MULTIPLIER = 5.0f;
+static const float MOVEMENT_MULTIPLIER = 0.0f;
 
 EndlessSpline::EndlessSpline(void)
 {
 }
 
-bool EndlessSpline::Initialize(int numSplines)
+bool EndlessSpline::Initialize(int numSplines, ivec2 xRand, ivec2 yRand, ivec2 zRand)
 {
 	//m_randomOffsetVector = normalize(vec3(rand() % 2 - 1, rand() % 2 - 1, rand() % 2 - 1));
 	m_numSplines = numSplines;
 	Spline* splineArray = new Spline[numSplines];
 
-	splineArray[0].GeneratePoints(vec3(0.0f, 0.0f, 0.0f), vec3(rand() % 10 + 5, rand() % 4 - 2, rand() % 4 - 2));
+	
+	float theta = 2.0f * 3.1415926f * float(0) / float(numSplines);//get the current angle 
+	float r = 400.0f;
+	float x = r * cosf(theta);//calculate the x component 
+	float y = r * sinf(theta);//calculate the y component 
+	
+	float theta2 = 2.0f * 3.1415926f * float(1) / float(numSplines);//get the current angle 
+	float x2 = r * cosf(theta);//calculate the x component 
+	float y2 = r * sinf(theta);//calculate the y component 
+
+	splineArray[0].GeneratePoints(vec3(x, y, 0), vec3(x2, y2, 0));
 	m_splineQueue.push(&splineArray[0]);
 
 
 	for(int i = 1; i < numSplines; i++) {
-		splineArray[i].GeneratePoints(splineArray[i-1].m_controlPoint2, splineArray[i-1].m_endPoint, splineArray[i-1].m_endPoint + vec3(rand() % 10 + 5, rand() % 4 - 2, rand() % 4 - 2));
+
+		float theta = 2.0f * 3.1415926f * float(i) / float(numSplines); //get the current angle 
+		float r = 400.0f;
+		float x = r * cosf(theta); //calculate the x component 
+		float y = r * sinf(theta); //calculate the y component 
+
+		if (i == numSplines - 2) {
+			theta = 2.0f * 3.1415926f * float(1) / float(numSplines);
+			
+			x = r * cosf(theta);
+			y = r * sinf(theta);
+			splineArray[i].GeneratePoints(splineArray[i-1].m_controlPoint2, splineArray[i-1].m_endPoint, splineArray[0].m_startPoint);
+		} else {
+			splineArray[i].GeneratePoints(splineArray[i-1].m_controlPoint2, splineArray[i-1].m_endPoint, vec3(x + rand() % xRand.x - xRand.y, y + rand() % yRand.x - yRand.y, rand() % zRand.x - zRand.y));
+		}
 		m_splineQueue.push(&splineArray[i]);
 	}
 
@@ -179,23 +204,23 @@ void EndlessSpline::Draw(const mat4 & projection, mat4 view, const ivec2 & size,
         if (this->GLReturnedError("Mesh::Draw - on entry"))
                 return;
 		
-        glEnable(GL_DEPTH_TEST);
-		glDisable(GL_CULL_FACE);
-        mat4 model = glm::mat4(1.0f);
-        //model = scale(model, vec3(10, 10, 10));
-        mat4 mvp = projection * m_splineMV * model;
-        mat3 nm = inverse(transpose(mat3(m_splineMV)));
+    glEnable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+    mat4 model = glm::mat4(1.0f);
+    //model = scale(model, vec3(10, 10, 10));
+    mat4 mvp = projection * m_splineMV * model;
+    mat3 nm = inverse(transpose(mat3(m_splineMV)));
 
     this->shaders[4]->Use(); //set shader to ads for ribbons
     this->GLReturnedError("Mesh::Draw - after use");
     this->shaders[4]->CommonSetup(time, value_ptr(size), value_ptr(projection), value_ptr(m_splineMV), value_ptr(mvp), value_ptr(nm));
 
 	this->spotlight_wireframe_shader.CustomSetup(1, time, size, projection, view, mvp, nm, lights, 2, cutoff_angle);
+
     this->GLReturnedError("Mesh::Draw - after common setup");
     glBindVertexArray(this->vertex_array_handle);
-    glPointSize(2); //change star point size
-	glDrawElements(GL_TRIANGLES
-		, this->vertex_indices.size(), GL_UNSIGNED_INT , &this->vertex_indices[0]);
+
+	glDrawElements(GL_TRIANGLES, this->vertex_indices.size(), GL_UNSIGNED_INT, &this->vertex_indices[0]);
     glBindVertexArray(0);
     this->GLReturnedError("Mesh::Draw - after draw");
 

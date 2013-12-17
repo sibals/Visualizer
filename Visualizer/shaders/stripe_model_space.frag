@@ -125,8 +125,8 @@ vec3 ads( )
 
 	x = clamp(x * 20.0, -20, 20);
 
-	vec3 color_1 = (int(abs(x)) % 2 == 0) ? vec3(0.1 + 0.25 * time, 0.0, 0.7) : vec3(0.1 + 0.25 * time, 0.0, 0.7);
-	vec3 color_2 = (int(abs(x)) % 2 == 1) ? vec3(0.6, 0.0, 0.7) : vec3(0.6, 0.0, 0.4);
+	vec3 color_1 = (int(abs(x)) % 2 == 0) ? vec3(0.1 + 0.05 * time, 0.0, 0.9) : vec3(0.1 + 0.05 * time, 0.0, 0.7);
+	vec3 color_2 = (int(abs(x)) % 2 == 1) ? vec3(0.6, 0.0, 0.9) : vec3(0.6, 0.0, 0.6);
 	vec3 c = mix(color_1, color_2, x > 0 ? fract(x) : fract(-x));
 
 	if (!gl_FrontFacing)

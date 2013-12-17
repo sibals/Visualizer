@@ -9,7 +9,7 @@ class EndlessSpline : public Mesh
 {
 public:
 	EndlessSpline(void);
-	bool Initialize(int numSplines);
+	bool Initialize(int numSplines, ivec2 xRand, ivec2 yRand, ivec2 zRand);
 	void ConcatenateSplinePoints();
 	void BuildMesh(int columns, int rows, float width);
 	void CreateBezier();

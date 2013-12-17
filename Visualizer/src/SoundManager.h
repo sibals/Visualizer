@@ -41,6 +41,7 @@ private:
 public:
     SoundManager();
 	~SoundManager();
+	void TakeDown();
 	bool Initialize();
 	//void TakeDown();
     bool DrawScene();

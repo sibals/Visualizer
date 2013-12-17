@@ -177,7 +177,7 @@ void GLSLProgram::setUniform( const char *name, float x, float y, float z)
     if( loc >= 0 ) {
         glUniform3f(loc,x,y,z);
     } else {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -192,7 +192,7 @@ void GLSLProgram::setUniform( const char *name, const vec4 & v)
     if( loc >= 0 ) {
         glUniform4f(loc,v.x,v.y,v.z,v.w);
     } else {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -202,7 +202,7 @@ void GLSLProgram::setUniform( const char *name, const vec2 & v)
     if( loc >= 0 ) {
         glUniform2f(loc,v.x,v.y);
     } else {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -213,7 +213,7 @@ void GLSLProgram::setUniform( const char *name, const mat4 & m)
     {
         glUniformMatrix4fv(loc, 1, GL_FALSE, &m[0][0]);
     } else {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -224,7 +224,7 @@ void GLSLProgram::setUniform( const char *name, const mat3 & m)
     {
         glUniformMatrix3fv(loc, 1, GL_FALSE, &m[0][0]);
     } else {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -235,7 +235,7 @@ void GLSLProgram::setUniform( const char *name, float val )
     {
         glUniform1f(loc, val);
     } else {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -246,7 +246,7 @@ void GLSLProgram::setUniform( const char *name, int val )
     {
         glUniform1i(loc, val);
     } else {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -257,7 +257,7 @@ void GLSLProgram::setUniform( const char *name, bool val )
     {
         glUniform1i(loc, val);
     } else {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 

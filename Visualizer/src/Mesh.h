@@ -38,7 +38,6 @@ public:
 	Shader eye_pattern_shader;
 	RenderTextureShader render_texture;
 	TextureShader texture_shader;
-	SpotlightWireframeShader spotlight_shader;
 	SpotlightWireframeShader spotlight_wireframe_shader;
 	RenderTextureShader post_normal;
 	RenderTextureShader post_one;
